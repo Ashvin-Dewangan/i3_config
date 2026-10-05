@@ -84,8 +84,14 @@ bindsym $mod+Shift+z exec --no-startup-id brave --private
 bindsym $mod+Shift+w exec --no-startup-id wallpaper-selector
 bindsym $mod+Shift+l exec --no-startup-id i3lock
 bindsym $mod+Shift+s exec --no-startup-id systemctl suspend
-bindsym $mod+Ctrl+Shift+s exec "i3-nagbar -t warning -m 'You pressed the PowerOff shortcut. Do you really want to PowerOff System? If You proceed now any unsaved work will be lost.' -B 'Yes, PowerOff' 'systemctl poweroff'"
-bindsym $mod+Shift+Ctrl+r exec "i3-nagbar -t warning -m 'You pressed the PowerOff shortcut. Do you really want to PowerOff System? If You proceed now any unsaved work will be lost.' -B 'Yes, Reboot' 'reboot'"
+# bindsym $mod+Ctrl+Shift+s exec "i3-nagbar -t warning -m 'You pressed the PowerOff shortcut. Do you really want to PowerOff System? If You proceed now any unsaved work will be lost.' -B 'Yes, PowerOff' 'systemctl poweroff'"
+# bindsym $mod+Shift+Ctrl+r exec "i3-nagbar -t warning -m 'You pressed the PowerOff shortcut. Do you really want to PowerOff System? If You proceed now any unsaved work will be lost.' -B 'Yes, Reboot' 'reboot'"
+bindsym $mod+Ctrl+Shift+s exec ./.config/i3/poweroff.sh
+bindsym $mod+Ctrl+Shift+r exec ./.config/i3/reboot.sh
+bindsym $mod+c exec "pkill -f poweroff[.]sh && notify-send 'Power Off Canceled'" ; exec "pkill -f reboot[.]sh && notify-send 'Reboot Canceled'"
+# Note: While ; is used to separate commands so if command1 fails it will have no impact on command2 while in i3 it has the exact same utility so it consider exec as part of the command arguments therefore exec is used twice in above line.
+# In i3 , and ; have same utility
+# In shell && is AND and runs command2 if 1st is success and || runs command2 only if 1st fails
 
 
 
