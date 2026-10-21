@@ -30,7 +30,7 @@ exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec_always --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -80,7 +80,7 @@ bindsym $mod+b exec --no-startup-id kitty bluetoothctl
 bindsym $mod+p exec --no-startup-id pavucontrol
 bindsym $mod+z exec --no-startup-id brave
 bindsym $mod+Shift+v exec --no-startup-id copyq toggle
-bindsym $mod+Shift+z exec --no-startup-id brave --private
+bindsym $mod+Ctrl+z exec --no-startup-id brave --incognito
 bindsym $mod+Shift+w exec --no-startup-id wallpaper-selector
 bindsym $mod+Shift+l exec --no-startup-id i3lock
 bindsym $mod+Shift+s exec --no-startup-id systemctl suspend
@@ -148,6 +148,7 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
+# The workspace number is not shown due to beign hidden with strip command in bar block, reson mentioned there.
 set $ws1 "1: "
 set $ws2 "2: "
 set $ws3 "3: "
@@ -224,16 +225,21 @@ bar {
 	# i3bar_command i3bar --transparency  # This line dont work
         status_command i3status --config ~/.config/i3/i3status.conf
 	position top
+	# The strip command is to hide the workspace number, if the number not mentioned then it does not auto arrgane the order.
+	strip_workspace_numbers yes
         # separator_symbol " | "
         # tray_output primary
         # padding 5px 0 0 0 0
-        font pango: JetBrains Mono Nerd 18
+        font pango: JetBrains Mono Nerd 14	
+	# landscale monitor
         colors {
                 # background #214f55
 		# background #4c789900
                 separator #ff95e8
         }
-	font pango: JetBrains Mono Nerd 14
+	separator_symbol " | "
+	# font pango: JetBrains Mono Nerd 08	
+	# portrait monitor
 	# Adjusting Volume via scrolling
 	bindsym button4 exec --no-startup-id pamixer -i 2 && $refresh_i3status
 	bindsym button5 exec --no-startup-id pamixer -d 2 && $refresh_i3status
@@ -249,6 +255,8 @@ bar {
 
 set $QT_QPA_PLATFORMTHEME qt6ct
 
+#Brave
+assign [class="Brave-browser"] $ws1
 # Whatsapp
 assign [class="whatsie"] $ws10
 exec flatpak run com.ktechpit.whatsie
@@ -284,6 +292,12 @@ bindsym --whole-window $alt+button4 exec --no-startup-id brightnessctl set +2% &
 bindsym --whole-window $alt+button5 exec --no-startup-id brightnessctl set 2%- && notify-send "☀️ $(fish -c 'math (brightnessctl get)/(brightnessctl max) x 100')"
 
 # Enable Natural Scrolling for Touchpad
-exec --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1   
+# exec --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1   
 # Enable Tap to Click for Touchpad
-exec --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1
+# exec --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1
+# The touchpad configurations for Xorg is in file /etc/X11/xorg.conf.d/touchpad.conf
+# bindsym $mod+Shift+w exec wallpaper-selector
+bindsym $mod+$alt+Left exec xrandr -o left
+bindsym $mod+$alt+Right exec xrandr -o right
+bindsym $mod+$alt+Down exec xrandr -o inverted
+bindsym $mod+$alt+Up exec xrandr -o normal
