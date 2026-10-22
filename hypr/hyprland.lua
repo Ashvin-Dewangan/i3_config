@@ -23,7 +23,7 @@ hl.monitor({
 	output = "",
 	mode = "1920x1200",
 	position = "auto",
-	scale = "1.2",
+	scale = "1.0",
 })
 
 ---------------------
@@ -49,8 +49,8 @@ hl.on("hyprland.start", function()
 	--   hl.exec_cmd("nm-applet")
 	--   hl.exec_cmd("waybar & hyprpaper & firefox")
 	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-	hl.exec_cmd("flatpak run eu.betterbird.Betterbird")
 	hl.exec_cmd("copyq")
+	hl.exec_cmd("flatpak run eu.betterbird.Betterbird")
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("hypridle")
@@ -171,20 +171,20 @@ hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" 
 -- Ref https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 -- "Smart gaps" / "No gaps when only"
 -- uncomment all if you wish to use that.
--- hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
--- hl.workspace_rule({ workspace = "f[1]",   gaps_out = 0, gaps_in = 0 })
--- hl.window_rule({
---     name  = "no-gaps-wtv1",
---     match = { float = false, workspace = "w[tv1]" },
---     border_size = 0,
---     rounding    = 0,
--- })
--- hl.window_rule({
---     name  = "no-gaps-f1",
---     match = { float = false, workspace = "f[1]" },
---     border_size = 0,
---     rounding    = 0,
--- })
+hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
+hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
+hl.window_rule({
+	name = "no-gaps-wtv1",
+	match = { float = false, workspace = "w[tv1]" },
+	border_size = 0,
+	rounding = 0,
+})
+hl.window_rule({
+	name = "no-gaps-f1",
+	match = { float = false, workspace = "f[1]" },
+	border_size = 0,
+	rounding = 0,
+})
 
 -- See https://wiki.hypr.land/Configuring/Layouts/Dwindle-Layout/ for more
 hl.config({
@@ -249,8 +249,8 @@ hl.gesture({
 -- Example per-device config
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/ for more
 hl.device({
-	name = "epic-mouse-v1",
-	sensitivity = -0.5,
+	name = "elan06fa:00-04f3:327e-touchpad",
+	sensitivity = 0.5,
 })
 
 ---------------------
