@@ -54,6 +54,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("hypridle")
+	hl.exec_cmd("hyprsunset")
 	hl.exec_cmd("sleep 0.375 && flatpak run com.ktechpit.whatsie") -- The sleep is because to prevent whatsie from starting before the waybar and tray. It is alsready set to is min time.
 end)
 
