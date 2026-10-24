@@ -49,6 +49,7 @@ hl.on("hyprland.start", function()
 	--   hl.exec_cmd("nm-applet")
 	--   hl.exec_cmd("waybar & hyprpaper & firefox")
 	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+	hl.exec_cmd("bluetoothctl power off")
 	hl.exec_cmd("copyq")
 	hl.exec_cmd("flatpak run eu.betterbird.Betterbird")
 	hl.exec_cmd("waybar")
@@ -271,12 +272,12 @@ hl.bind(
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
-hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
 
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave"))
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("brave --incognito"))
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("copyq toggle"))
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("copyq toggle"))
 
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
@@ -286,6 +287,41 @@ hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
+-- Move foucs between tiled and floating windows
+hl.bind("SUPER + V", function()
+	local window = hl.get_active_window()
+	if not window then
+		return
+	end
+	hl.dispatch(hl.dsp.window.cycle_next({
+		floating = not window.floating,
+		tiled = window.floating,
+	}))
+end, { description = "Switch focus between tiled and floating windows" })
+
+-- Resize windows with mainMod + SHIFT + arrow keys
+local resizeUnit = 50 -- Define a resize unit (e.g., 50 pixels)
+-- Bind SUPER + SHIFT + Arrow Keys to resize the active window
+-- x = horizontal change, y = vertical change, relative = true (pixels)
+hl.bind("SUPER + ALT + Left", hl.dsp.window.resize({ x = -resizeUnit, y = 0, relative = true }), { repeating = true })
+hl.bind("SUPER + ALT + Right", hl.dsp.window.resize({ x = resizeUnit, y = 0, relative = true }), { repeating = true })
+hl.bind("SUPER + ALT + Up", hl.dsp.window.resize({ x = 0, y = -resizeUnit, relative = true }), { repeating = true })
+hl.bind("SUPER + ALT + Down", hl.dsp.window.resize({ x = 0, y = resizeUnit, relative = true }), { repeating = true })
+-- Using resize mode
+hl.bind("SUPER + R", hl.dsp.submap("resize"))
+hl.define_submap("resize", function()
+	hl.bind("right", hl.dsp.window.resize({ x = resizeUnit, y = 0, relative = true }), { repeating = true })
+	hl.bind("left", hl.dsp.window.resize({ x = -resizeUnit, y = 0, relative = true }), { repeating = true })
+	hl.bind("up", hl.dsp.window.resize({ x = 0, y = -resizeUnit, relative = true }), { repeating = true })
+	hl.bind("down", hl.dsp.window.resize({ x = 0, y = resizeUnit, relative = true }), { repeating = true })
+	hl.bind("escape", hl.dsp.submap("reset"))
+end)
+
+-- Move Windows
+hl.bind(mainMod .. " + SHIFT + left", hl.dsp.window.move({ direction = "left" }))
+hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.move({ direction = "right" }))
+hl.bind(mainMod .. " + SHIFT + up", hl.dsp.window.move({ direction = "up" }))
+hl.bind(mainMod .. " + SHIFT + down", hl.dsp.window.move({ direction = "down" }))
 
 -- Manual lock
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
@@ -305,6 +341,7 @@ for i = 1, 10 do
 	local key = i % 10 -- 10 maps to key 0
 	hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
 	hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+	hl.bind(mainMod .. " + CTRL + SHIFT + " .. key, hl.dsp.window.move({ workspace = i, follow = false }))
 end
 
 -- Example special workspace (scratchpad)
